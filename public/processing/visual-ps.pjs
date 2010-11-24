@@ -1,0 +1,106 @@
+var currentState = {};
+var nextState = {};
+
+var min = 50;
+var max = 250;
+void fetch() {
+  $.ajax({
+    url: '/processes.json',
+    success: function(data) {
+      nextState = {};
+      $.each(data, function(i, e) {
+        var index = 'pid' + e.pid;
+        nextState[index] = e;
+        
+        nextState[index].y = 480 - (parseFloat(e.cpu) / 100 * 480);
+        if(currentState == null || currentState[index] == null || currentState[index].mem != e.mem || currentState[index].cpu != e.cpu) {
+          nextState[index].x = Math.round(Math.random() * 640);
+          if(currentState && currentState[index]) {
+            currentState[index].ticks = 0;
+          }
+        } else {
+          nextState[index].x = currentState[index].x;
+        }
+        nextState[index].size = min + ((max - min) * parseFloat(e.mem) / 100); 
+      });
+    }
+  });
+}
+
+fetch();
+
+PFont font;
+void setup()
+{
+  size(640, 480);
+  font = loadFont("courier");
+  textAlign(CENTER);
+}
+
+// Fetch data every x frames
+var interval = 6400;
+var ticks = 0;
+
+void draw(){
+  background(0, 0, 0);
+  for(pid in nextState) {
+    var p = nextState[pid];
+    var l = currentState[pid];
+    
+    if(l == null) {
+      currentState[pid] = p;
+      currentState[pid].y = 480;
+      currentState[pid].x = Math.round(640 * Math.random());
+      currentState[pid].size = 0;
+      currentState[pid].ticks = 0;
+      l = currentState[pid];
+    }
+ 
+    
+    if(l == null) {
+      return;
+    }
+    
+    var x = l.x;
+    var y = l.y;
+    var size = l.size;
+
+    if(Math.abs(p.y - l.y) > 1) {
+      var a = 100 * (Math.abs(p.y - l.y) / interval) * (0.00000001 + sin(radians(ticks * 180 / interval)));
+      y = l.y + Math.floor(a * ((p.y - l.y) / Math.abs(p.y - l.y)));
+    }
+    
+    if(y > 0 && Math.abs(p.x - l.x) > 1) {
+      var a = 100 * (Math.abs(p.x - l.x) / interval) * (0.00000001 + sin(radians(ticks * 180 / interval)));
+      x = l.x + Math.floor(a * ((p.x - l.x) / Math.abs(p.x - l.x)));
+    }
+    
+    if(Math.abs(p.size - l.size) > 2) {
+      size = l.size + Math.floor(((p.size - l.size) / Math.abs(p.size - l.size)));
+    }
+    x = Math.min(640 - size / 2, Math.max(size / 2, x));
+    y = Math.min(480 - size / 2, Math.max(size / 2, y));
+
+    fill(255, 255, 255, 128);
+    noStroke();
+    ellipse(x, y, size, size);
+    
+    fill(0, 0, 0);
+    stroke(0, 0, 0);
+    textFont(font, size / max * 36); 
+    
+    var cmd = p.command.split(' ').shift();
+    cmd = cmd.split('/').pop();
+    text(cmd, x, y); 
+    
+    l.x = x;
+    l.y = y;
+    l.size = size;
+      
+    if(++ticks == interval) {
+      fetch();
+      ticks = 0;
+    }
+  }
+}
+
