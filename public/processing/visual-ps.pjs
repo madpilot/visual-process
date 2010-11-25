@@ -33,7 +33,7 @@ PFont font;
 void setup()
 {
   size(640, 480);
-  font = loadFont("courier");
+  font = loadFont("helvetica");
   textAlign(CENTER);
 }
 
@@ -64,15 +64,17 @@ void draw(){
     var x = l.x;
     var y = l.y;
     var size = l.size;
-
+    
+    var a = 100 * sin(radians(ticks * 180 / interval));
+    
     if(Math.abs(p.y - l.y) > 1) {
-      var a = 100 * (Math.abs(p.y - l.y) / interval) * (0.00000001 + sin(radians(ticks * 180 / interval)));
-      y = l.y + Math.floor(a * ((p.y - l.y) / Math.abs(p.y - l.y)));
+      var v = (p.y - l.y) / interval;
+      y = l.y + (a * v);
     }
     
     if(y > 0 && Math.abs(p.x - l.x) > 1) {
-      var a = 100 * (Math.abs(p.x - l.x) / interval) * (0.00000001 + sin(radians(ticks * 180 / interval)));
-      x = l.x + Math.floor(a * ((p.x - l.x) / Math.abs(p.x - l.x)));
+      var v = (p.x - l.x) / interval;
+      x = l.x + (a * v);
     }
     
     if(Math.abs(p.size - l.size) > 2) {
