@@ -1,10 +1,14 @@
 # Visual Process
 
-This is a Processing.js experiment. It visualises the Process table on your UNIX (well, currently only OSX based) computer.
+This is a Processing.js experiment. It visualises the Process table on your UNIX (tested on OSX and Linux) computer.
 
 Simply fire up the Sinatra app, and point your modern browser (no IE please) and watch the process balls fly around the screen.
 
 The bigger the ball, the more memory it takes. The higher the ball, the more CPU time it is taking.
+
+## Screenshot:
+
+![Alt Screenshot](http://dl.dropbox.com/u/26498/visual-ps.png)
 
 ## TODO
 
