@@ -16,7 +16,7 @@ See a bad quality [video of it here](http://www.youtube.com/watch?v=TQTLYG1qZRI)
 
 Setup SSH certificates so the sinatra app can login to the remote server, then change line 16 to something like:
 
-``ps = `ssh [user@hostname] 'ps aux'` ``
+`` ps = `ssh [user@hostname] 'ps aux'` ``
 
 ## TODO
 
