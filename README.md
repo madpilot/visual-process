@@ -10,6 +10,8 @@ The bigger the ball, the more memory it takes. The higher the ball, the more CPU
 
 ![Alt Screenshot](http://dl.dropbox.com/u/26498/visual-ps.png)
 
+See a bad quality [video of it here](http://www.youtube.com/watch?v=TQTLYG1qZRI)
+
 ## TODO
 
 1. Make the code more effecient
